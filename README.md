@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/images/ai-workflow-logo.gif" width="320" alt="AI Workflow Logo">
+  <img src="assets/images/ai-workflow-logo.gif" width="600" alt="AI Workflow Logo">
 </div>
 
 # AI Workflow
