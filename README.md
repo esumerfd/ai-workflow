@@ -4,6 +4,10 @@ A collection of Claude Code skills for AI-assisted software development. Covers 
 
 > **Work in progress.** This repository evolves as the skills are used on real projects. Expect rough edges, missing pieces, and approaches that change as understanding deepens.
 
+<div align="center">
+  <img src="assets/images/ai-workflow-logo.gif" width="320" alt="AI Workflow Logo">
+</div>
+
 ---
 
 ## Overview
