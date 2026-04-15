@@ -1,4 +1,8 @@
+<div align="center">
+
 ![AI Workflow Logo](assets/images/ai-workflow-logo.gif)
+
+</div>
 
 # AI Workflow
 
