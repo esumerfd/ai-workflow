@@ -1,12 +1,12 @@
+<div align="center">
+  <img src="assets/images/ai-workflow-logo.gif" width="320" alt="AI Workflow Logo">
+</div>
+
 # AI Workflow
 
 A collection of Claude Code skills for AI-assisted software development. Covers the full lifecycle from initial exploration through implementation, review, and archiving.
 
 > **Work in progress.** This repository evolves as the skills are used on real projects. Expect rough edges, missing pieces, and approaches that change as understanding deepens.
-
-<div align="center">
-  <img src="assets/images/ai-workflow-logo.gif" width="320" alt="AI Workflow Logo">
-</div>
 
 ---
 
