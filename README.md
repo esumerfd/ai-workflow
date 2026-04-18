@@ -12,6 +12,24 @@ A collection of Claude Code skills for AI-assisted software development. Covers 
 
 ---
 
+## Installation
+
+### Step 1 — Add the marketplace
+
+```bash
+claude plugin marketplace add github:esumerfd/ai-workflow
+```
+
+### Step 2 — Install the plugin
+
+```bash
+claude plugin install ai-workflow@ai-workflow
+```
+
+Once installed, skills are available as `/workflow:explore`, `/workflow:plan`, etc.
+
+---
+
 ## Overview
 
 Software development with AI assistance works best when there is a shared, verified understanding of what exists, what is wanted, and why each decision was made. Without that structure, AI agents produce confident output on shaky foundations — and the mistakes are expensive to find late.

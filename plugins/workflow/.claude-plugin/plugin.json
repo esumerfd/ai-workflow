@@ -1,0 +1,5 @@
+{
+  "name": "workflow",
+  "description": "Generic reusable AI-assisted software development workflow. Eight phases from exploration through archiving, with explicit feedback loops and proof-driven implementation.",
+  "author": { "name": "Ed Sumerfield" }
+}

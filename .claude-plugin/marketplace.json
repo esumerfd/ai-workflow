@@ -1,0 +1,16 @@
+{
+  "name": "ai-workflow",
+  "owner": { "name": "Ed Sumerfield" },
+  "metadata": {
+    "description": "AI-assisted software development workflow",
+    "homepage": "https://github.com/esumerfd/ai-workflow"
+  },
+  "plugins": [
+    {
+      "name": "ai-workflow",
+      "version": "0.1.0",
+      "source": "./plugins/workflow",
+      "description": "Generic reusable AI-assisted software development workflow"
+    }
+  ]
+}
