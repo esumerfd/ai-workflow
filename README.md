@@ -17,7 +17,7 @@ A collection of Claude Code skills for AI-assisted software development. Covers 
 ### Step 1 — Add the marketplace
 
 ```bash
-claude plugin marketplace add github:esumerfd/ai-workflow
+claude plugin marketplace add esumerfd/ai-workflow
 ```
 
 ### Step 2 — Install the plugin
