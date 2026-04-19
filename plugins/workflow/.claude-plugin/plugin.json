@@ -1,5 +1,6 @@
 {
   "name": "workflow",
   "description": "Generic reusable AI-assisted software development workflow. Two skills: plan (recursive terrain mapping, requirements, architecture, and workstream breakdown) and build (stories, red/green/refactor, proof, challenge, archive).",
+  "version": "0.2.0",
   "author": { "name": "Ed Sumerfield" }
 }

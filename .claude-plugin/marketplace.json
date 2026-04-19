@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "ai-workflow",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "source": "./plugins/workflow",
       "description": "Generic reusable AI-assisted software development workflow"
     }
