@@ -1,30 +1,23 @@
 ---
 name: workflow:plan
-description: "Phase 2: Define the desired outcome. Write requirements grounded in explore.md facts."
-argument-hint: <feature-name>
+description: "Recursive planning skill. Level 1: map terrain, define requirements, decide architecture, scope phases. Level 2: scope a phase and break it into independently buildable workstreams."
+argument-hint: <feature-name> [phase-name]
 ---
 # Skill: /workflow:plan
 
-**Phase 2 — Define the Desired Outcome**
+**Plan — Understand, Decide, Scope**
 
-Write requirements grounded in confirmed facts from `explore.md`. Describe what the change should achieve — in abstract terms, without implementation details.
+Planning is a recursive drill-down. The same skill runs at two levels, applying different rules at each depth. Use it once at project level to produce a full plan, then once per phase to break the phase into buildable workstreams.
 
----
-
-## When to Use This Skill
-
-Use `/workflow:plan` when:
-- `01-explore/explore.md` exists and is certified, OR terrain is already well understood
-- You are ready to define what the change should achieve before deciding how
-
-Skip to `/workflow:design` if requirements are already clear. Skip to `/workflow:refine` if both requirements and architecture are clear.
+- `/workflow:plan <feature-name>` — Level 1: project plan (terrain + requirements + architecture + phase list)
+- `/workflow:plan <feature-name> <phase-name>` — Level 2: phase plan (scope + workstream breakdown)
 
 ---
 
 ## Inputs
 
-- Feature name (to locate the workspace)
-- Optionally: a feature description, brief, or ticket reference to seed the interview
+- Feature name (always required)
+- Phase name (Level 2 only — the phase from the parent `plan.md` phase list)
 
 If the feature name is missing, ask before starting.
 
@@ -34,174 +27,503 @@ If the feature name is missing, ask before starting.
 
 Follow `skills/_shared/workspace.md`.
 
-Create if not present:
+**Level 1:** Create if not present:
 ```
-<feature>/02-plan/
-<feature>/00-status/02-plan/
+<feature>/
+<feature>/00-status/
 ```
 
-Set `<feature>/00-status/02-plan/status.md` to `status: started`.
+**Level 2:** The feature workspace must already exist with a certified `plan.md`. If `<feature>/plan.md` does not exist, stop and say: "Run `/workflow:plan <feature-name>` first to create the project plan."
 
-If `<feature>/02-plan/requirements.md` already exists:
-- Read it before starting.
-- Summarize existing requirements and ask: resume (appending) or treat as a new planning session?
+Create the phase directory if not present:
+```
+<feature>/<phase-name>/
+```
 
-Load `<feature>/01-explore/explore.md` if it exists. Note any open questions and flagged couplings — these need disposition before requirements are written.
+Set `<feature>/00-status/status.md` to `status: started` if this is the first phase invoked.
+
+If the target artifact already exists (`plan.md` for Level 1, `<phase>/plan.md` for Level 2):
+- Read it before proceeding.
+- Summarise the current state and ask: resume (appending) or start a new session?
 
 ---
 
-## Step 2 — Engineer Interview
+## LEVEL 1 — Project Plan
 
-The engineer articulates the feature in their own words first. The AI's paraphrase comes after — not before.
+Run when no `<feature>/plan.md` exists, or when revisiting the project-level plan.
 
-Ask in sequence:
+---
+
+### Step 2 — Familiarity Assessment
+
+Before exploring, calibrate depth and vocabulary. Ask:
+
+1. "How familiar are you with this area — worked in it, read the code, or completely new territory?"
+2. "Is there a specific concern, coupling, or behaviour you most want to understand?"
+3. "Are there files, modules, or components you know are central?"
+
+Use the answers to set mode:
+- **High familiarity:** confirmatory — validate existing beliefs, surface surprises.
+- **Low familiarity:** discovery — systematic traversal, wider coverage, more confirmations.
+
+---
+
+### Step 3 — Parallel Terrain Analysis
+
+Dispatch analysis across the target area. Use the Agent tool to run specialist agents in parallel where the codebase has natural separation (distinct services, architectural layers, major modules). Each agent:
+
+- Identifies primary responsibilities of its area
+- Lists the public interface (exported functions, API endpoints, event types)
+- Identifies direct dependencies (imports, service calls, shared state)
+- Notes patterns or standards in use
+
+For tightly coupled areas, use a single agent. Do not split an area that cannot be understood without the other side of the coupling.
+
+Each agent returns structured observations — not prose. The orchestrating session merges and presents for confirmation.
+
+---
+
+### Step 4 — Observation and Confirmation Loop
+
+Use the **Ralph Wiggum technique** (`skills/_shared/ralph-wiggum.md`) for every observation. Never record before the engineer confirms.
+
+Work through the terrain in order:
+
+**4a. Component Responsibilities**
+For each major component:
+1. State its primary responsibility in one sentence.
+2. Confirm: "Is that an accurate description of what [Component] does?"
+3. Record only what is confirmed.
+
+**4b. Interface Inventory**
+For each component:
+1. List its public interface.
+2. Confirm: "Does this look complete, or are there other entry points?"
+
+**4c. Coupling Assessment**
+For each coupling discovered:
+1. Name both components and describe the coupling plainly.
+2. State the coupling type: data shared, call dependency, temporal, or external.
+3. Ask the stakes-weighted question:
+   - Low: "Is this coupling intentional, or an accident of the current structure?"
+   - High: "If [A] changes its interface, what breaks in [B]?"
+4. Record coupling type and whether it is a candidate seam.
+
+**4d. Testing Patterns**
+1. What testing approach is in use?
+2. Are there shared fixtures, factories, or test helpers?
+3. What is covered and what is notably absent?
+
+Confirm each finding before recording.
+
+---
+
+### Step 5 — Terrain Challenge Questions
+
+Before writing, surface the questions whose wrong answers would invalidate the context map. Pick the two or three that matter most.
+
+Examples:
+- "This diagram shows [A] depends only on [B] — are there runtime dependencies not visible in the code?"
+- "The coupling between [X] and [Y] is marked Low — does that hold under load or failure?"
+- "I marked [Component] as owning [responsibility] — is there another service that shares that ownership?"
+
+Ask each. Record the answer. Update any confirmed observation changed by the answer.
+
+---
+
+### Step 6 — Engineer Interview
+
+The engineer articulates the feature in their own words first. Ask in sequence:
 
 1. "Describe the feature in your own words — what should it do and why?"
 2. "Who benefits, and what problem does it solve for them?"
-3. "What does success look like — how would you know the feature is working correctly?"
-4. "What is explicitly out of scope for this change?"
+3. "What does success look like — how would you know it's working correctly?"
+4. "What is explicitly out of scope?"
 
-After the engineer answers, paraphrase: "So if I understand correctly, you want to [paraphrase]. Is that right?"
+Paraphrase back: "So if I understand correctly, you want to [paraphrase]. Is that right?"
 
-Only proceed once the paraphrase is confirmed.
-
----
-
-## Step 3 — Scope Declaration
-
-Before writing requirements, make scope explicit and confirmed.
-
-Ask:
-1. "Are we changing only [area from explore.md], or does this touch other areas?"
-2. "Are there any constraints on the approach — technical, team, timeline, or policy?"
-3. "Are there any existing commitments (API contracts, data formats, interfaces) that must not change?"
-
-Record the scope boundary. Requirements written outside this boundary are flagged.
+Only proceed once confirmed.
 
 ---
 
-## Step 4 — Disposition of explore.md Findings
+### Step 7 — Scope Declaration
 
-If `explore.md` exists, every coupling and fragility flagged there needs explicit disposition before requirements are written. Read the couplings section and for each item ask:
+Before writing requirements:
 
-> "The exploration flagged [coupling/fragility]. For this feature, should we: (a) address it with a requirement, (b) accept the risk and note the rationale, or (c) treat it as out of scope?"
+1. "Are we changing only [area from terrain], or does this touch other areas?"
+2. "Are there constraints — technical, team, timeline, or policy?"
+3. "Are there existing commitments (API contracts, data formats) that must not change?"
+
+Record the scope boundary. Requirements written outside it are flagged.
+
+---
+
+### Step 8 — Disposition of Terrain Findings
+
+Every coupling and fragility noted in the terrain needs disposition before requirements are written. For each:
+
+> "The terrain flagged [coupling/fragility]. For this feature, should we: (a) address it with a requirement, (b) accept the risk and note rationale, or (c) treat it as out of scope?"
 
 Record each disposition. A requirement that ignores a known coupling without explanation is a hidden risk.
 
-Open questions from `explore.md` must also be resolved or explicitly accepted:
+---
 
-> "The exploration left this question open: [question]. Do you want to resolve it now, or accept the uncertainty and proceed?"
+### Step 9 — Requirement Drafting
+
+For each requirement:
+1. State it: "The system shall [behaviour] when [condition]."
+2. Tie it to the engineer's stated goal or a confirmed terrain observation.
+3. Present for confirmation before recording.
+
+Flag contradictions with terrain facts. Flag ambiguous requirements.
+
+Challenge questions before writing: surface two or three whose wrong answers would invalidate the requirements.
 
 ---
 
-## Step 5 — Requirement Drafting
+### Step 10 — Architectural Constraints First
 
-With the interview and dispositions complete, draft requirements. For each requirement:
+Before proposing any design:
 
-1. State it in plain language: "The system shall [behaviour] when [condition]."
-2. Tie it to the engineer's stated goal or a confirmed explore.md observation.
-3. Present it for confirmation before recording.
+1. "Are there architectural approaches that are off the table — technical, team, or policy reasons?"
+2. "Are there existing patterns a new design should follow or deliberately diverge from?"
+3. "Are there latency, scale, or operational requirements that constrain the approach?"
+4. "How much change to existing interfaces are you willing to accept?"
 
-**Requirement flags:**
-- If a requirement contradicts a confirmed observation in `explore.md`, flag it: "This requirement assumes [X], but the context map shows [Y]. Do you want to resolve this first?"
-- If a requirement is ambiguous, surface it: "This could mean [A] or [B] — which do you intend?"
-- If a requirement has a directly testable form, note it: "This can be expressed as an acceptance criterion — do you want to add one?"
+Record constraints. Any approach violating them is eliminated before presenting.
 
 ---
 
-## Step 6 — Challenge Questions
+### Step 11 — Design Analysis and Proposal
 
-Before writing `requirements.md`, surface the two or three questions whose wrong answers would invalidate the requirements.
+Run specialist agents in parallel:
+- **Agent A:** Analyse the component map. Identify which components the change must integrate with, modify, or replace.
+- **Agent B:** Research alternative architectural approaches. Enumerate at least two alternatives.
+- **Agent C (if applicable):** Identify spike candidates — assumptions the design depends on that are not yet verified.
+
+For each alternative:
+1. State the approach in one sentence.
+2. List strengths relative to requirements.
+3. List weaknesses or risks.
+4. State why it was rejected or recommended.
+
+Present to the engineer:
+> "My recommendation is [X] because [reason]. Do you agree, or do you want to explore [alternative] further?"
+
+Do not write the ADR until the direction is confirmed.
+
+If any architectural assumption is unverified, define a spike before proceeding:
+- One specific assumption being tested
+- Explicit pass/fail criteria
+- Minimal scope
+
+---
+
+### Step 12 — Design Challenge Questions
+
+Before writing the ADR, surface two or three assumptions that could invalidate it.
 
 Examples:
-- "Requirement R3 assumes the current API contract is stable — is that guaranteed for this release?"
-- "R4 addresses the coupling flagged in explore.md — is the proposed decoupling feasible without a larger refactor?"
-- "The scope excludes [area] — if that area changes, does it break any of these requirements?"
+- "This design assumes the event bus has at-least-once delivery — what is the failure mode if it does not?"
+- "The proposed cache layer depends on key stability — what happens when the upstream data model changes?"
 
-Ask each. Record the answer. Revise requirements if an answer changes the picture.
+Ask each. Record. Revise approach if needed.
 
 ---
 
-## Step 7 — Write requirements.md
+### Step 13 — Phase Scoping
 
-Write `<feature>/02-plan/requirements.md`:
+Break the feature into named phases. Phases are logical milestones with sequential dependencies — each phase can be planned and built independently.
+
+For each phase:
+1. Name it (descriptive, not a number).
+2. State its scope: what it builds and what it depends on from prior phases.
+3. Confirm: "Does this phase boundary make sense as an independent milestone?"
+
+Record the phase list. Phase names are used as directory names — keep them short and lowercase-hyphenated.
+
+---
+
+### Step 14 — Write plan.md
+
+Write `<feature>/plan.md`:
 
 ```markdown
-# Requirements: <Feature Name>
+# Plan: <Feature Name>
 
 **Session:** <ISO date>
-**Based on:** 01-explore/explore.md (if used) | Engineer interview
-**Status:** Draft | Confirmed
+**Status:** Draft | Certified
 
 ---
 
-## Feature Summary
+## Terrain Map
 
-[Two to three sentences from the confirmed engineer paraphrase.]
+### Summary
 
-## Scope
+[Two to four sentences: what was explored, what is now understood, what remains uncertain.]
 
-**In scope:**
-- [item]
+### Component Map
 
-**Out of scope:**
-- [item]
+[REQUIRED: Mermaid diagram. Apply Mermaid styling from CLAUDE.md.]
 
-**Constraints:**
-- [technical / team / policy constraints]
+### Components
+
+#### <ComponentName>
+**Confidence:** High | Medium | Low | Unverified
+**Responsibility:** [one sentence]
+**Interface:** [key public methods, endpoints, events]
+**Dependencies:** [what it depends on]
+
+[Repeat for each component]
+
+### Couplings
+
+| Component A | Component B | Type | Strength | Candidate Seam? |
+|-------------|-------------|------|----------|-----------------|
+
+### Testing
+
+**Approach:** [unit / integration / E2E / none]
+**Notable gaps:** [what is not tested]
+
+---
 
 ## Requirements
 
+### Scope
+
+**In scope:** [items]
+**Out of scope:** [items]
+**Constraints:** [technical / team / policy]
+
 ### R1 — <short title>
 **The system shall** [behaviour] **when** [condition].
-**Grounded in:** [explore.md observation or engineer statement]
-**Acceptance criterion:** [testable condition, if defined]
+**Grounded in:** [terrain observation or engineer statement]
+**Acceptance criterion:** [testable condition]
 **Status:** Confirmed
 
-### R2 — <short title>
-...
+[Repeat for each requirement]
 
-## Accepted Risks
+### Accepted Risks
 
-| Risk | Source | Rationale for Acceptance |
-|------|--------|--------------------------|
-| [coupling or fragility from explore.md] | explore.md | [reason not addressed] |
+| Risk | Source | Rationale |
+|------|--------|-----------|
 
-## Superseded Requirements
+---
 
-[Requirements from prior sessions that no longer apply. Never deleted — marked here with reason.]
+## Architecture Decision
+
+### Context
+
+[Situation requiring a decision. Reference terrain and requirements.]
+
+### Decision
+
+[The chosen approach: "We will [do X] by [mechanism Y]."]
+
+### Architecture Diagram
+
+[REQUIRED: Mermaid diagram showing proposed change against terrain map. Gray = existing unchanged, green = new, orange = modified.]
+
+### Consequences
+
+**Positive:** [what this enables]
+**Negative / Trade-offs:** [what this costs]
+**Risks:** [unverified assumptions]
+
+### Alternatives Considered
+
+#### <Alternative Name>
+[One sentence] — **Rejected because:** [reason]
+
+### Accepted Unverified Assumptions
+
+[Assumptions not spiked and rationale for proceeding.]
+
+---
+
+## Phases
+
+| Phase | Scope | Depends On | Status |
+|-------|-------|------------|--------|
+| <phase-name> | [brief scope] | — | pending |
+
+---
 
 ## Open Questions
 
-- [ ] [question that was not resolved]
+- [ ] [question]
 
 ## Challenge Questions Asked
 
 **Q:** [question]
-**A:** [answer] → [impact: none / updated R[n]]
+**A:** [answer] → [impact]
 ```
 
-**Append-only rule:** requirements from prior sessions are never deleted. Superseded requirements are moved to the Superseded section with a note.
+Write supporting files if not present (append if they are):
+- `patterns.md` — confirmed code conventions and idioms
+- `testing.md` — confirmed testing patterns and fixtures
+- `standards.md` — confirmed project standards
 
 ---
 
-## Step 8 — Certification and Status Update
+### Step 15 — Level 1 Certification
 
-Present the completed `requirements.md`:
+> "Here is the project plan — terrain map, requirements, architectural decision, and phase list. Would you sign off on this as a document you'd defend to a peer? If anything is wrong or missing, let's correct it now."
 
-> "Here are the requirements. Before I mark this phase complete: are these the right requirements — ones you'd stand behind in a design discussion?"
+Make any requested changes, then re-present. Once certified:
+1. Update `<feature>/00-status/status.md` to `status: started` with a note of which phases are pending.
+2. State next step: "Run `/workflow:plan <feature-name> <first-phase-name>` to plan the first phase."
 
-Once confirmed:
-1. Update `<feature>/00-status/02-plan/status.md` to `status: complete`.
-2. Update `<feature>/00-status/status.md`.
-3. State next phase: `/workflow:design <feature-name>` or `/workflow:decompose <feature-name>` if architecture is already clear.
+---
+
+## LEVEL 2 — Phase Plan
+
+Run when `<feature>/plan.md` is certified and you are planning a specific phase.
+
+---
+
+### Step 2 — Load Context
+
+Load:
+- `<feature>/plan.md` — terrain map, requirements, architectural constraints, phase list
+- `<feature>/patterns.md`, `testing.md`, `standards.md`
+
+Locate the phase in the plan.md phase list. If the phase name is not found, stop and list the available phases.
+
+---
+
+### Step 3 — Phase Scope Confirmation
+
+Present the phase scope from `plan.md` to the engineer:
+
+> "This phase is scoped as: [scope from plan.md]. Is this still accurate, or has the scope changed since the project plan was written?"
+
+If the scope has changed, update `plan.md` before proceeding.
+
+---
+
+### Step 4 — Workstream Breakdown
+
+Break the phase into workstreams using proof-boundary rules:
+
+**Rules for workstream identification:**
+- **Prefer end-to-end workstreams.** A workstream that exercises a thin vertical slice (input → processing → output/storage) is preferred over one that isolates a single horizontal layer. End-to-end proofs surface integration failures that layer tests cannot catch.
+- **Smallest independently provable unit.** Each workstream must be buildable and provable without the others being complete (except for declared dependencies).
+- **Find natural seams.** Look for loose couplings in the terrain map — these are the right boundaries.
+- **Layer isolation is a last resort.** A workstream that only exercises one layer (e.g., a service class in isolation with mocks) is acceptable only when no end-to-end slice is feasible.
+- **Assign risk profile:** tracer-bullet (thinnest E2E slice, integration risk dominant) or layered (logic complexity dominant, E2E not yet feasible).
+
+For each proposed workstream:
+1. Name it (descriptive, lowercase-hyphenated).
+2. State its scope and what it excludes.
+3. Describe the end-to-end proof: "The proof will demonstrate [observable behaviour] from [input] to [output/state change]."
+4. State its risk profile.
+5. Identify dependencies on other workstreams.
+6. Confirm: "Does this workstream boundary make sense — is it independently buildable?"
+
+---
+
+### Step 5 — Write definition.md Per Workstream
+
+For each approved workstream, write `<feature>/<phase>/<workstream>/definition.md`:
+
+```markdown
+# Workstream: <name>
+
+**Feature:** <feature>
+**Phase:** <phase>
+**Risk profile:** tracer-bullet | layered
+**Session:** <ISO date>
+
+---
+
+## Scope
+
+[What this workstream builds and what it explicitly excludes.]
+
+## Entry Criteria
+
+[What must exist or be true before this workstream can start.]
+
+## Exit Criteria
+
+[Observable conditions that prove the workstream is complete. Written from the outside — what a user or test can observe, not what the code does internally.]
+
+## End-to-End Proof Description
+
+[The behaviour the proof will demonstrate: input → expected output or state change. Written at the system boundary, not the implementation boundary. No layer references.]
+
+## Interfaces
+
+[Contracts this workstream must satisfy or consume from other workstreams.]
+
+## Workstream Dependencies
+
+[Other workstreams that must complete before this one can start, and why.]
+
+## Constraints
+
+[Architectural decisions from plan.md that directly constrain this workstream.]
+```
+
+---
+
+### Step 6 — Write Phase plan.md
+
+Write `<feature>/<phase>/plan.md`:
+
+```markdown
+# Plan: <Phase Name>
+
+**Feature:** <feature>
+**Session:** <ISO date>
+**Status:** Draft | Certified
+
+---
+
+## Phase Scope
+
+[What this phase builds. Reference the parent plan.md phase entry.]
+
+## Requirements Addressed
+
+[Requirements from plan.md that this phase satisfies, fully or partially.]
+
+## Workstreams
+
+| Workstream | Risk Profile | Depends On | Status |
+|------------|--------------|------------|--------|
+| <name> | tracer-bullet | — | pending |
+
+## Open Questions
+
+- [ ] [question]
+```
+
+---
+
+### Step 7 — Level 2 Certification
+
+Present the workstream list and definitions to the engineer:
+
+> "Here are the workstreams for the [phase] phase. Each has a definition.md with scope, exit criteria, and end-to-end proof description. This is the last gate before building begins — do you approve this workstream breakdown?"
+
+If changes are requested: update the relevant `definition.md` files and the phase `plan.md`, then re-present.
+
+Once approved:
+1. Update `<feature>/00-status/status.md`.
+2. State next step: "Run `/workflow:build <feature-name> <phase>/<first-workstream>` to build the first workstream. Independent workstreams can be built in parallel."
 
 ---
 
 ## Rules
 
-- **Engineer articulates first.** Do not propose requirements before the engineer has described the feature.
-- **Every requirement is grounded.** No requirement without a source in the interview, explore.md, or a confirmed open question answer.
-- **Contradictions are surfaced, not silently resolved.** A requirement that conflicts with explore.md is a flag, not a silent rewrite.
-- **Append only.** Prior requirements are never deleted — only superseded with rationale.
+- **Terrain first, requirements second, design third.** Never write requirements before the terrain is confirmed. Never propose a design before requirements are confirmed.
+- **Engineer articulates first.** Do not propose requirements before the engineer describes the feature.
+- **Every requirement is grounded.** No requirement without a source in the interview, terrain map, or a confirmed open question answer.
+- **The diagram is required at Level 1.** Both the terrain component map and the architecture diagram are required. A plan without either is incomplete.
+- **Workstreams prefer end-to-end.** A workstream that only tests one layer is a last resort, not the default.
+- **Append, never overwrite.** Prior requirements and decisions are never deleted — superseded with rationale.
 - **Accepted risks are recorded.** Silence is not acceptance. Every flagged coupling gets a written disposition.
+- **Do not write the ADR until direction is confirmed.** Present and confirm before writing.

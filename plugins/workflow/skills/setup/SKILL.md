@@ -94,10 +94,10 @@ WORKFLOW_HOME  <value>   ✓ set and writable
 ```
 
 If everything is configured correctly:
-> "Environment is ready. Start a new feature with `/workflow:explore <feature-name>`."
+> "Environment is ready. Start a new feature with `/workflow:plan <feature-name>`."
 
 If anything was just configured and requires a shell reload:
-> "Environment configured. Run `source <profile-file>` (or open a new terminal), then start with `/workflow:explore <feature-name>`."
+> "Environment configured. Run `source <profile-file>` (or open a new terminal), then start with `/workflow:plan <feature-name>`."
 
 ---
 

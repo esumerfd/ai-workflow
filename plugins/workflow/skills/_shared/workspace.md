@@ -14,7 +14,7 @@ The workspace root is always an absolute path. Record it in `project.json` as `w
 
 ## Bootstrapping on First Use
 
-When a phase is invoked for the first time, create the workspace scaffold if it does not already exist:
+When a skill is invoked for the first time on a feature, create the workspace scaffold if it does not already exist:
 
 ```
 <workspace-root>/
@@ -55,45 +55,51 @@ status: pending | started | complete | blocked
 [Optional: list any blockers preventing advancement, with enough detail to act on them]
 ```
 
-Phase-level status files summarise across their work units. The root `00-status/status.md` summarises across all phases.
-
-## Phase Directory Layout
+## Directory Layout
 
 ```
 <feature>/
 ├── project.json
+├── plan.md                         # Root: terrain map + requirements + ADR + phase list
+├── patterns.md                     # Discovered conventions (updated throughout)
+├── testing.md                      # Testing patterns
+├── standards.md                    # Project standards
+│
 ├── 00-status/
-├── 01-explore/
-│   ├── explore.md
-│   ├── patterns.md
-│   ├── testing.md
-│   └── standards.md
-├── 02-plan/
-│   └── requirements.md
-├── 03-design/
-│   └── design.md
-├── 04-decompose/
-│   └── units.md
-├── 05-refine/
-│   └── <unit>/
-│       ├── stories.json
-│       └── prompt.md
-├── 06-review/
-│   └── <unit>/
-│       └── findings.md
-├── 07-certify/
-│   └── <unit>/
-│       └── certify.md
-└── 08-archive/
-    └── summary.md
+│   └── status.md
+│
+└── <phase>/                        # One directory per phase (omit level if no phases)
+    ├── plan.md                     # Phase requirements + workstream list
+    │
+    └── <workstream>/               # One directory per workstream
+        ├── definition.md           # Written by plan — build contract
+        ├── stories.md              # Written by build — executable stories, source of truth
+        ├── stories.json            # Derived by ralph-tui converter — only present if using ralph-tui
+        └── proof.md                # Written by build — proof results and challenge record
 ```
 
-## Resuming a Phase
+For features with no meaningful phases, workstream directories sit directly under the feature root alongside `plan.md`:
 
-If the phase artifact already exists, read it before starting. Present a summary of the existing state and ask: resume from where it left off, or start a new session (appending, not overwriting).
+```
+<feature>/
+├── plan.md
+├── patterns.md
+├── testing.md
+├── standards.md
+├── 00-status/
+└── <workstream>/
+    ├── definition.md
+    ├── stories.md
+    └── proof.md
+```
+
+## Resuming
+
+If the primary artifact for a skill already exists (`plan.md`, `definition.md`, `stories.md`), read it before starting. Present a summary of the existing state and ask: resume from where it left off, or start a new session (appending, not overwriting).
 
 ## Rules
 
 - Never write workflow artifacts into a code repository. The workspace is always separate.
-- Unit names from `04-decompose/units.md` must be used consistently in all downstream phases.
-- Status files are updated at the start and end of every phase.
+- Workstream names from `plan/<phase>/plan.md` must be used consistently in all downstream work.
+- Status files are updated at the start and end of every skill invocation.
+- `stories.json` is a derived artifact — always regenerated from `stories.md`, never hand-edited.
