@@ -40,7 +40,7 @@ Create if not present:
 Set `<feature>/00-status/08-archive/status.md` to `status: started`.
 
 Load everything from the completed workspace:
-- `01-explore/explore.md` and `context.d/`
+- `01-explore/explore.md`, `patterns.md`, `testing.md`, `standards.md`
 - `02-plan/requirements.md`
 - `03-design/design.md`
 - `04-decompose/units.md`
@@ -104,14 +104,14 @@ Do not write to CLAUDE.md until every addition is confirmed. This is an irrevers
 
 ---
 
-## Step 5 — context.d/ Updates
+## Step 5 — Explore Updates
 
 If the exploration or implementation revealed new or corrected knowledge about the codebase:
 
-- Update `<feature>/01-explore/context.d/patterns.md`, `testing.md`, or `standards.md`
+- Update `<feature>/01-explore/patterns.md`, `testing.md`, or `standards.md`
 - These feed into future `/workflow:explore` and `/workflow:refine` sessions for the same feature or related features
 
-Ask: "Did we discover anything during implementation that corrects or extends the context map in `explore.md`? If so, I'll update `context.d/` before archiving."
+Ask: "Did we discover anything during implementation that corrects or extends the context map in `explore.md`? If so, I'll update the relevant files in `01-explore/` before archiving."
 
 ---
 

@@ -39,7 +39,6 @@ Follow the workspace bootstrap process in `skills/_shared/workspace.md`.
 Create these directories if they do not exist:
 ```
 <feature>/01-explore/
-<feature>/01-explore/context.d/
 <feature>/00-status/01-explore/
 ```
 
@@ -208,13 +207,13 @@ These carry forward to the plan phase.]
 **A:** [answer] → [impact on map: none / updated [section]]
 ```
 
-### Supporting Files in context.d/
+### Supporting Files in 01-explore/
 
 Write only what was confirmed. Do not speculate:
 
-- `context.d/patterns.md` — code conventions, idioms, framework patterns in use
-- `context.d/testing.md` — testing patterns, fixtures, coverage approach
-- `context.d/standards.md` — discovered project standards (naming, structure, error handling)
+- `patterns.md` — code conventions, idioms, framework patterns in use
+- `testing.md` — testing patterns, fixtures, coverage approach
+- `standards.md` — discovered project standards (naming, structure, error handling)
 
 ---
 
@@ -240,4 +239,4 @@ Once certified:
 - **Append, never overwrite.** If `explore.md` already exists, add a session separator and append. Prior confirmed observations are not erased by a new session.
 - **Couplings are seam candidates.** Mark every coupling. Downstream phases depend on this.
 - **Challenge questions are not optional.** Surface the two or three most dangerous assumptions before writing the artifact.
-- **Keep context.d/ lean.** Only confirmed, reusable knowledge. Not a scratchpad.
+- **Keep supporting files lean.** Only confirmed, reusable knowledge. Not a scratchpad.

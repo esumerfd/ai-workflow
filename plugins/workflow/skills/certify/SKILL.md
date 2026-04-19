@@ -57,7 +57,7 @@ Not all code needs the same depth of walkthrough. Focus time on what will matter
 
 Plan the walkthrough accordingly:
 - **Skip:** boilerplate, obvious CRUD, framework scaffolding
-- **Skim:** standard patterns already confirmed in context.d/
+- **Skim:** standard patterns already confirmed in `01-explore/`
 - **Deep walk:** coupling points, error paths, edge cases, anything that diverged from the design
 
 ---

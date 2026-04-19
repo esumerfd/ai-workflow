@@ -65,7 +65,9 @@ Phase-level status files summarise across their work units. The root `00-status/
 ├── 00-status/
 ├── 01-explore/
 │   ├── explore.md
-│   └── context.d/
+│   ├── patterns.md
+│   ├── testing.md
+│   └── standards.md
 ├── 02-plan/
 │   └── requirements.md
 ├── 03-design/

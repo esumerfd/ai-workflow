@@ -35,7 +35,7 @@ Follow `skills/_shared/workspace.md`.
 Load:
 - `<feature>/04-decompose/units.md` — unit scope, entry/exit criteria, dependencies
 - `<feature>/03-design/design.md` — architectural constraints
-- `<feature>/01-explore/context.d/` — coding standards, patterns, testing conventions
+- `<feature>/01-explore/` — coding standards, patterns, testing conventions (`patterns.md`, `testing.md`, `standards.md`)
 
 For each unit to be refined, create if not present:
 ```
@@ -69,10 +69,10 @@ Record the approach for each unit. It shapes story granularity.
 ## Step 3 — Standards Check
 
 Before generating stories, ask:
-> "Are there any coding conventions, patterns, or standards for this unit that are NOT already in `context.d/`? If so, I'll factor them in before locking stories."
+> "Are there any coding conventions, patterns, or standards for this unit that are NOT already in `01-explore/`? If so, I'll factor them in before locking stories."
 
 If the engineer provides new standards:
-- Add them to `<feature>/01-explore/context.d/standards.md` before generating stories.
+- Add them to `<feature>/01-explore/standards.md` before generating stories.
 
 ---
 
@@ -82,7 +82,7 @@ Units with no dependencies on each other can have their stories generated in par
 
 1. Reads the unit scope and exit criteria from `units.md`
 2. Reads the architecture diagram from `design.md`
-3. Reads `context.d/` for applicable standards
+3. Reads `01-explore/` for applicable standards (`patterns.md`, `testing.md`, `standards.md`)
 4. Generates stories in the format below
 5. Returns the story set for engineer approval — does not lock them
 
@@ -161,11 +161,11 @@ Read `stories.json` in this directory. Implement each story in order. Mark `pass
 Load from the filesystem before starting:
 - `../../01-explore/explore.md` — component map
 - `../../03-design/design.md` — architectural constraints
-- `../../01-explore/context.d/` — standards and patterns
+- `../../01-explore/` — standards and patterns (`patterns.md`, `testing.md`, `standards.md`)
 
 ## Constraints
 
-- [Any unit-specific constraints not in context.d/]
+- [Any unit-specific constraints not in `01-explore/`]
 
 ## Definition of Done
 

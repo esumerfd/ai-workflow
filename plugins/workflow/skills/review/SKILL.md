@@ -135,8 +135,8 @@ Present the proposed routing for each finding to the engineer. Engineer decides 
 Look for patterns across findings within and across units:
 
 - Are multiple findings related to the same coupling or fragility flagged in `explore.md`?
-- Are there recurring violations of standards in `context.d/`?
-- Are there new conventions emerging that should be promoted to `context.d/`?
+- Are there recurring violations of standards in `01-explore/`?
+- Are there new conventions emerging that should be promoted to `01-explore/`?
 
 Flag recurring patterns for promotion. These are the most valuable output of the review phase — they prevent future recurrence.
 
@@ -183,7 +183,7 @@ Write `<feature>/06-review/<unit-name>/findings.md` for each unit:
 
 ## Patterns Flagged for Promotion
 
-- [pattern description] → promote to `context.d/[file]`
+- [pattern description] → promote to `01-explore/[patterns|testing|standards].md`
 
 ## Accepted Improvements (non-blocking)
 
