@@ -17,7 +17,7 @@ Summarise the current state of the workflow by reading all status files and arti
 
 ## Step 1 — Resolve the Workspace
 
-The workspace is the current working directory. Look for a `00-status/` directory or `plan.md` here.
+The workspace is the current working directory. Look for `project.json` or `status.md` here.
 
 If neither exists, report:
 > "No workflow workspace found in the current directory. Run `/workflow:plan <feature-name>` to start one, or `cd` into an existing workspace first."
@@ -28,7 +28,7 @@ Stop.
 
 ## Step 2 — Read Workspace State
 
-Read `00-status/status.md` for overall status.
+Read `status.md` for overall status.
 
 Read `plan.md` to determine:
 - Whether phases exist (look for the Phases table)

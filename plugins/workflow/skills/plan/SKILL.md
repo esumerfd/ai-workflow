@@ -29,18 +29,18 @@ Follow `skills/_shared/workspace.md`.
 
 **Level 1:** Create if not present:
 ```
-<feature>/
-<feature>/00-status/
+project.json
+status.md
 ```
 
-**Level 2:** The feature workspace must already exist with a certified `plan.md`. If `<feature>/plan.md` does not exist, stop and say: "Run `/workflow:plan <feature-name>` first to create the project plan."
+**Level 2:** The feature workspace must already exist with a certified `plan.md`. If `plan.md` does not exist, stop and say: "Run `/workflow:plan <feature-name>` first to create the project plan."
 
 Create the phase directory if not present:
 ```
-<feature>/<phase-name>/
+<NN>-<phase-name>/
 ```
 
-Set `<feature>/00-status/status.md` to `status: started` if this is the first phase invoked.
+Set `status.md` to `status: started` if this is the first phase invoked.
 
 If the target artifact already exists (`plan.md` for Level 1, `<phase>/plan.md` for Level 2):
 - Read it before proceeding.
@@ -50,7 +50,7 @@ If the target artifact already exists (`plan.md` for Level 1, `<phase>/plan.md` 
 
 ## LEVEL 1 — Project Plan
 
-Run when no `<feature>/plan.md` exists, or when revisiting the project-level plan.
+Run when no `plan.md` exists, or when revisiting the project-level plan.
 
 ---
 
@@ -246,7 +246,7 @@ Record the phase list. Phase names are used as directory names — keep them sho
 
 ### Step 14 — Write plan.md
 
-Write `<feature>/plan.md`:
+Write `plan.md`:
 
 ```markdown
 # Plan: <Feature Name>
@@ -372,22 +372,22 @@ Write supporting files if not present (append if they are):
 > "Here is the project plan — terrain map, requirements, architectural decision, and phase list. Would you sign off on this as a document you'd defend to a peer? If anything is wrong or missing, let's correct it now."
 
 Make any requested changes, then re-present. Once certified:
-1. Update `<feature>/00-status/status.md` to `status: started` with a note of which phases are pending.
+1. Update `status.md` to `status: started` with a note of which phases are pending.
 2. State next step: "Run `/workflow:plan <feature-name> <first-phase-name>` to plan the first phase."
 
 ---
 
 ## LEVEL 2 — Phase Plan
 
-Run when `<feature>/plan.md` is certified and you are planning a specific phase.
+Run when `plan.md` is certified and you are planning a specific phase.
 
 ---
 
 ### Step 2 — Load Context
 
 Load:
-- `<feature>/plan.md` — terrain map, requirements, architectural constraints, phase list
-- `<feature>/patterns.md`, `testing.md`, `standards.md`
+- `plan.md` — terrain map, requirements, architectural constraints, phase list
+- `patterns.md`, `testing.md`, `standards.md`
 
 Locate the phase in the plan.md phase list. If the phase name is not found, stop and list the available phases.
 
@@ -426,7 +426,7 @@ For each proposed workstream:
 
 ### Step 5 — Write definition.md Per Workstream
 
-For each approved workstream, write `<feature>/<phase>/<workstream>/definition.md`:
+For each approved workstream, write `<phase>/<workstream>/definition.md` (relative to the workspace root):
 
 ```markdown
 # Workstream: <name>
@@ -471,7 +471,7 @@ For each approved workstream, write `<feature>/<phase>/<workstream>/definition.m
 
 ### Step 6 — Write Phase plan.md
 
-Write `<feature>/<phase>/plan.md`:
+Write `<phase>/plan.md` (relative to the workspace root):
 
 ```markdown
 # Plan: <Phase Name>
@@ -512,7 +512,7 @@ Present the workstream list and definitions to the engineer:
 If changes are requested: update the relevant `definition.md` files and the phase `plan.md`, then re-present.
 
 Once approved:
-1. Update `<feature>/00-status/status.md`.
+1. Update `status.md`.
 2. State next step: "Run `/workflow:build <feature-name> <phase>/<first-workstream>` to build the first workstream. Independent workstreams can be built in parallel."
 
 ---

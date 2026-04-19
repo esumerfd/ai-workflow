@@ -28,13 +28,13 @@ If either is missing, ask before starting. If the workstream directory or `defin
 Follow `skills/_shared/workspace.md`.
 
 Resolve the workstream directory:
-- With phase: `<feature>/<phase>/<workstream>/`
-- Without phase: `<feature>/<workstream>/`
+- With phase: `<phase>/<workstream>/`
+- Without phase: `<workstream>/`
 
 Load before proceeding:
 - `<workstream>/definition.md` — scope, exit criteria, end-to-end proof description, constraints
-- `<feature>/plan.md` — terrain map and architectural constraints
-- `<feature>/patterns.md`, `testing.md`, `standards.md` — project conventions
+- `plan.md` — terrain map and architectural constraints
+- `patterns.md`, `testing.md`, `standards.md` — project conventions
 
 If `<workstream>/stories.md` already exists:
 - Read it and report the count of locked stories.
@@ -48,7 +48,7 @@ Before generating stories, ask:
 > "Are there any coding conventions, patterns, or standards for this workstream that are NOT already captured in `patterns.md` or `standards.md`? If so, I'll add them before generating stories."
 
 If the engineer provides new standards:
-- Add them to `<feature>/standards.md` before proceeding.
+- Add them to `standards.md` before proceeding.
 
 ---
 
@@ -248,8 +248,8 @@ If yes: promote. If no: discard.
 Ask: "Did we discover anything that corrects or extends the terrain map in `plan.md`?"
 
 If yes:
-- Update `<feature>/plan.md` terrain section with the correction.
-- Update `<feature>/patterns.md`, `testing.md`, or `standards.md` as appropriate.
+- Update `plan.md` terrain section with the correction.
+- Update `patterns.md`, `testing.md`, or `standards.md` as appropriate.
 
 **CLAUDE.md promotions:**
 
@@ -318,7 +318,7 @@ Write `<workstream>/proof.md`:
 
 ## Step 11 — Status Update
 
-1. Update `<feature>/00-status/status.md` to reflect the completed workstream.
+1. Update `status.md` to reflect the completed workstream.
 2. If all workstreams in the phase are complete: "All workstreams in [phase] are complete. Run `/workflow:build <feature> <phase>/<next-workstream>` for the next workstream, or open your PR."
 3. If this was the last workstream across all phases: "Feature [name] is complete. All workstreams proven. Ready to open the PR."
 
